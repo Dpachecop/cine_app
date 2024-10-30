@@ -1,4 +1,6 @@
+import 'package:cine_app/config/constants/themoviedbkey.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'Home_screen';
@@ -8,7 +10,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Screen'),
+        title: Text('TEXTO GENERICO'),
+      ),
+      body: Center(
+        child: Text(Enviroment.theMovieDbKey),
       ),
     );
   }
