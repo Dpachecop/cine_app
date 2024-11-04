@@ -9,12 +9,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TEXTO GENERICO'),
-      ),
-      body: Center(
-        child: Text(Enviroment.theMovieDbKey),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('TEXTO GENERICO'),
+        ),
+        body: const Placeholder());
   }
 }
