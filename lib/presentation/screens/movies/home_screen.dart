@@ -1,5 +1,6 @@
 import 'package:cine_app/config/constants/themoviedbkey.dart';
 import 'package:cine_app/presentation/providers/movies/movies_providers.dart';
+import 'package:cine_app/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,11 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('TEXTO GENERICO'),
-        ),
-        body: _HomeView());
+    return Scaffold(body: _HomeView());
   }
 }
 
@@ -38,14 +35,20 @@ class _HomeViewState extends ConsumerState {
   @override
   Widget build(BuildContext context) {
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
-    return ListView.builder(
-      itemCount: nowPLayingMovies.length,
-      itemBuilder: (BuildContext context, int index) {
-        final movie = nowPLayingMovies[index];
-        return ListTile(
-          title: Text(movie.title),
-        );
-      },
+    return Column(
+      children: [
+        const CustomAppbar(),
+        Expanded(
+            child: ListView.builder(
+          itemCount: nowPLayingMovies.length,
+          itemBuilder: (BuildContext context, int index) {
+            final movie = nowPLayingMovies[index];
+            return ListTile(
+              title: Text(movie.title),
+            );
+          },
+        ))
+      ],
     );
   }
 }
