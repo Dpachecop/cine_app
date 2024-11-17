@@ -1,8 +1,7 @@
-import 'package:cine_app/config/constants/themoviedbkey.dart';
-import 'package:cine_app/presentation/providers/movies/movies_providers.dart';
+import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:cine_app/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,14 +10,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _HomeView());
+    return const Scaffold(
+      body: _HomeView(),
+      bottomNavigationBar: CustomBotttomNavigation(),
+    );
   }
 }
 
 class _HomeView extends ConsumerStatefulWidget {
-  const _HomeView({
-    super.key,
-  });
+  const _HomeView();
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -34,11 +34,12 @@ class _HomeViewState extends ConsumerState {
 
   @override
   Widget build(BuildContext context) {
-    final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
+    // final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final slideMovies = ref.watch(MovieSlideViewProvider);
     return Column(
       children: [
         const CustomAppbar(),
-        MoviesSlideView(movies: nowPLayingMovies)
+        MoviesSlideView(movies: slideMovies)
         /* Expanded(
             child: ListView.builder(
           itemCount: nowPLayingMovies.length,
