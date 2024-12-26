@@ -34,22 +34,18 @@ class _HomeViewState extends ConsumerState {
 
   @override
   Widget build(BuildContext context) {
-    // final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideMovies = ref.watch(MovieSlideViewProvider);
     return Column(
       children: [
         const CustomAppbar(),
-        MoviesSlideView(movies: slideMovies)
-        /* Expanded(
-            child: ListView.builder(
-          itemCount: nowPLayingMovies.length,
-          itemBuilder: (BuildContext context, int index) {
-            final movie = nowPLayingMovies[index];
-            return ListTile(
-              title: Text(movie.title),
-            );
-          },
-        ))*/
+        MoviesSlideView(movies: slideMovies),
+        HorizontalMovieSlideview(
+          movies: nowPLayingMovies,
+          label: 'En cines',
+          //TODO: implementar un metodo que te de una peli aleatoria
+          subLabel: '¡Aleatorio!',
+        )
       ],
     );
   }
