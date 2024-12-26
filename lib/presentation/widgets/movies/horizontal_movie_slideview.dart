@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cine_app/config/Helpers/human_formats.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/providers/movies/movies_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HorizontalMovieSlideview extends StatelessWidget {
   final List<Movie> movies;
@@ -19,7 +21,7 @@ class HorizontalMovieSlideview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 360,
+      height: 370,
       child: Column(
         children: [
           if (label != null || subLabel != null)
@@ -52,6 +54,8 @@ class _Slide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var format = NumberFormat('#.0', 'en_US');
+
     final textstyle = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -81,14 +85,17 @@ class _Slide extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
+
+          //* TITULO
           SizedBox(
             width: 150,
             child: Text(
               movie.title,
               maxLines: 2,
-              style: textstyle.bodySmall,
+              style: textstyle.titleSmall,
             ),
           ),
+          // RATING
           Row(
             children: [
               const Icon(
@@ -96,8 +103,8 @@ class _Slide extends StatelessWidget {
                 color: Colors.amber,
               ),
               Text(
-                '${movie.voteAverage}',
-                style: textstyle.bodySmall,
+                HumanFormats.Humanformats(movie.voteAverage),
+                style: textstyle.bodyMedium?.copyWith(color: Colors.amber),
               )
             ],
           )
