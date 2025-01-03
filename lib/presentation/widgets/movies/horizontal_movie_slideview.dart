@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/Helpers/human_formats.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class HorizontalMovieSlideview extends StatefulWidget {
   final List<Movie> movies;
@@ -87,8 +86,6 @@ class _Slide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var format = NumberFormat('#.0', 'en_US');
-
     final textstyle = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),

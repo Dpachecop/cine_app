@@ -36,19 +36,58 @@ class _HomeViewState extends ConsumerState {
   Widget build(BuildContext context) {
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideMovies = ref.watch(MovieSlideViewProvider);
-    return Column(
-      children: [
-        const CustomAppbar(),
-        MoviesSlideView(movies: slideMovies),
-        HorizontalMovieSlideview(
-          movies: nowPLayingMovies,
-          label: 'En cines',
-          //TODO: implementar un metodo que te de una peli aleatoria
-          subLabel: '¡Aleatorio!',
-          loadNextpage: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
-        )
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          title: CustomAppbar(),
+        ),
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                MoviesSlideView(movies: slideMovies),
+                HorizontalMovieSlideview(
+                  movies: nowPLayingMovies,
+                  label: 'En cines',
+                  //TODO: implementar un metodo que te de una peli aleatoria
+                  subLabel: '¡Aleatorio!',
+                  loadNextpage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                HorizontalMovieSlideview(
+                  movies: nowPLayingMovies,
+                  label: 'Mejores calificadas',
+                  //TODO: implementar un metodo que te de una peli aleatoria
+                  subLabel: '¡Aleatorio!',
+                  loadNextpage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                HorizontalMovieSlideview(
+                  movies: nowPLayingMovies,
+                  label: 'Estrenos',
+                  //TODO: implementar un metodo que te de una peli aleatoria
+                  subLabel: '¡Aleatorio!',
+                  loadNextpage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                HorizontalMovieSlideview(
+                  movies: nowPLayingMovies,
+                  label: 'Mejor calificadas',
+                  //TODO: implementar un metodo que te de una peli aleatoria
+                  subLabel: '¡Aleatorio!',
+                  loadNextpage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+              ],
+            ),
+          );
+        }, childCount: 1))
       ],
     );
   }
