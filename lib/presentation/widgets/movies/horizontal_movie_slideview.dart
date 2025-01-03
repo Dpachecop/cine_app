@@ -1,15 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/Helpers/human_formats.dart';
 import 'package:cine_app/domain/entities/movie.dart';
-import 'package:cine_app/presentation/providers/movies/movies_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class HorizontalMovieSlideview extends StatelessWidget {
+class HorizontalMovieSlideview extends StatefulWidget {
   final List<Movie> movies;
   final String? label;
   final String? subLabel;
-  final MovieCallback? loadNextpage;
+  final VoidCallback? loadNextpage;
 
   const HorizontalMovieSlideview(
       {super.key,
@@ -19,26 +18,60 @@ class HorizontalMovieSlideview extends StatelessWidget {
       this.loadNextpage});
 
   @override
+  State<HorizontalMovieSlideview> createState() =>
+      _HorizontalMovieSlideviewState();
+}
+
+class _HorizontalMovieSlideviewState extends State<HorizontalMovieSlideview> {
+  final scrolllController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    scrolllController.addListener(
+      () {
+        if (widget.loadNextpage == null) return;
+
+        //   print(scrolllController.position.maxScrollExtent);
+
+        if ((scrolllController.position.pixels + 500) >=
+            scrolllController.position.maxScrollExtent) {
+          // print("LLAMADO DEL LOADNEXTPAGE");
+          widget.loadNextpage!();
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    scrolllController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 370,
       child: Column(
         children: [
-          if (label != null || subLabel != null)
+          if (widget.label != null || widget.subLabel != null)
             _Title(
-              label: label,
-              subLabel: subLabel,
+              label: widget.label,
+              subLabel: widget.subLabel,
             ),
           const SizedBox(
             height: 10,
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: movies.length,
+              controller: scrolllController,
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
-                return _Slide(movie: movies[index]);
+                return _Slide(movie: widget.movies[index]);
               },
             ),
           )

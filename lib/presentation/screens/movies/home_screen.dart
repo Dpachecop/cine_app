@@ -45,6 +45,9 @@ class _HomeViewState extends ConsumerState {
           label: 'En cines',
           //TODO: implementar un metodo que te de una peli aleatoria
           subLabel: '¡Aleatorio!',
+          loadNextpage: () {
+            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+          },
         )
       ],
     );
