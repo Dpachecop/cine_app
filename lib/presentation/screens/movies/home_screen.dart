@@ -30,12 +30,20 @@ class _HomeViewState extends ConsumerState {
     super.initState();
 
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upComingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final upComingMovies = ref.watch(upComingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+
     final slideMovies = ref.watch(MovieSlideViewProvider);
+
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
@@ -58,30 +66,30 @@ class _HomeViewState extends ConsumerState {
                   },
                 ),
                 HorizontalMovieSlideview(
-                  movies: nowPLayingMovies,
+                  movies: topRatedMovies,
                   label: 'Mejores calificadas',
                   //TODO: implementar un metodo que te de una peli aleatoria
                   subLabel: '¡Aleatorio!',
                   loadNextpage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
                   },
                 ),
                 HorizontalMovieSlideview(
-                  movies: nowPLayingMovies,
+                  movies: upComingMovies,
                   label: 'Estrenos',
                   //TODO: implementar un metodo que te de una peli aleatoria
                   subLabel: '¡Aleatorio!',
                   loadNextpage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    ref.read(upComingMoviesProvider.notifier).loadNextPage();
                   },
                 ),
                 HorizontalMovieSlideview(
-                  movies: nowPLayingMovies,
-                  label: 'Mejor calificadas',
+                  movies: popularMovies,
+                  label: 'populares',
                   //TODO: implementar un metodo que te de una peli aleatoria
                   subLabel: '¡Aleatorio!',
                   loadNextpage: () {
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    ref.read(popularMoviesProvider.notifier).loadNextPage();
                   },
                 ),
               ],
