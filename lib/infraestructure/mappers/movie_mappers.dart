@@ -28,7 +28,7 @@ class MovieMappers {
       backdropPath: (movieDB.backdropPath != '')
           ? 'https://image.tmdb.org/t/p/w500/${movieDB.backdropPath}.jpg'
           : 'https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=_zOuJu755g2eEUioiOUdz_mHKJQJn-tDgIAhQzyeKUQ=',
-      genreIds: movieDB.genres.map((e) => e.toString()).toList(),
+      genreIds: movieDB.genres.map((e) => e.name).toList(),
       id: movieDB.id,
       originalLanguage: movieDB.originalLanguage,
       originalTitle: movieDB.originalTitle,
