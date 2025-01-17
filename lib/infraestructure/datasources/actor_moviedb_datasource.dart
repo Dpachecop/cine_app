@@ -23,6 +23,9 @@ class ActorMovieDbDatasource extends ActorsDatasource {
         .map(
           (e) => ActorMapper.actorToEntitie(e),
         )
+        .where(
+          (actor) => actor.profilePath != '',
+        )
         .toList();
     return actors;
   }

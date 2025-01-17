@@ -2,12 +2,12 @@ class MovieDetails {
   MovieDetails({
     required this.adult,
     required this.backdropPath,
-    required this.belongsToCollection,
+    this.belongsToCollection,
     required this.budget,
     required this.genres,
     required this.homepage,
     required this.id,
-    required this.imdbId,
+    this.imdbId,
     required this.originalLanguage,
     required this.originalTitle,
     required this.overview,
@@ -34,7 +34,7 @@ class MovieDetails {
   final List<Genre> genres;
   final String homepage;
   final int id;
-  final String imdbId;
+  final String? imdbId;
   final String originalLanguage;
   final String originalTitle;
   final String overview;
@@ -123,16 +123,16 @@ class MovieDetails {
 
 class BelongsToCollection {
   BelongsToCollection({
-    required this.id,
-    required this.name,
-    required this.posterPath,
-    required this.backdropPath,
+    this.id,
+    this.name,
+    this.posterPath,
+    this.backdropPath,
   });
 
-  final int id;
-  final String name;
-  final String posterPath;
-  final String backdropPath;
+  final int? id;
+  final String? name;
+  final String? posterPath;
+  final String? backdropPath;
 
   factory BelongsToCollection.fromJson(Map<String, dynamic> json) =>
       BelongsToCollection(
