@@ -1,8 +1,11 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cine_app/config/router/app_router.dart';
+import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/delegates/movie_search_delegate.dart';
 import 'package:cine_app/presentation/providers/movies/movie_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../providers/Functions/theme_provider.dart';
 
@@ -49,12 +52,18 @@ class CustomAppbar extends ConsumerWidget {
               // Botón de búsqueda
               IconButton(
                 onPressed: () {
-                  showSearch(
+                  showSearch<Movie?>(
                     context: context,
                     delegate: MovieSearchDelegate(
                       searchMovies: movierepository.searchMovies,
                     ),
-                  );
+                  ).then((movie) {
+                    if (movie == null) return;
+
+                    if (context.mounted) {
+                      context.push('/movie/${movie.id}');
+                    }
+                  });
                 },
                 icon: const Icon(Icons.search),
               )
