@@ -16,6 +16,7 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       FadeIn(
+        curve: Curves.bounceInOut,
         animate: query.isNotEmpty,
         child: IconButton(
             onPressed: () => query = '', icon: const Icon(Icons.clear_rounded)),

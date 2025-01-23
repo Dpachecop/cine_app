@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'presentation/providers/Functions/theme_provider.dart';
+
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
   runApp(const ProviderScope(child: MainApp()));
@@ -14,10 +16,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: appRouter,
-      theme: AppTheme().getTheme(),
-      debugShowCheckedModeBanner: false,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final themeMode = ref.watch(themeProvider);
+        return MaterialApp.router(
+          routerConfig: appRouter,
+          theme: AppTheme().lightTheme, // Tema claro
+          darkTheme: AppTheme().darkTheme, // Tema oscuro
+          themeMode: themeMode, // Determina cuál tema usar
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
