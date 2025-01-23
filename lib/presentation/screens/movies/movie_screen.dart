@@ -91,7 +91,7 @@ class _MovieDetails extends StatelessWidget {
                   children: [
                     Text(movie.title, style: textStyles.titleLarge),
                     Text(movie.overview),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Padding(
@@ -100,7 +100,7 @@ class _MovieDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           LegibleStars(movie: movie),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
