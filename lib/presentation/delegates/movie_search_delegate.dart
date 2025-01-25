@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/Helpers/human_formats.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,34 @@ typedef SearchMovies = Future<List<Movie>> Function(String query);
 
 class MovieSearchDelegate extends SearchDelegate<Movie?> {
   final SearchMovies searchMovies;
+  StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  Timer? debouncetimer;
+
+  void onQueryChanged(String query) {
+    if (debouncetimer?.isActive ?? false) {
+      debouncetimer!.cancel();
+    }
+    debouncetimer = Timer(
+      const Duration(milliseconds: 500),
+      () async {
+        if (query.isEmpty) {
+          debouncedMovies.add([]);
+          return;
+        }
+
+        final movies = await searchMovies(query);
+
+        debouncedMovies.add(movies);
+      },
+    );
+  }
+
+  void clearStreams() {
+    debouncedMovies.close();
+  }
 
   MovieSearchDelegate({required this.searchMovies});
+
   @override
   String get searchFieldLabel => 'Buscar peli';
 
@@ -28,7 +56,10 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-        onPressed: () => close(context, null),
+        onPressed: () {
+          clearStreams();
+          close(context, null);
+        },
         icon: const Icon(Icons.arrow_back_ios_new_outlined));
   }
 
@@ -39,8 +70,10 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder(
-      future: searchMovies(query),
+    onQueryChanged(query);
+    return StreamBuilder(
+      stream: debouncedMovies.stream,
+      // future: searchMovies(query),
       builder: (BuildContext context, snapshot) {
         final movies = snapshot.data ?? [];
 
@@ -50,7 +83,9 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
             final movie = movies[index];
             return _MovieItem(
               movie: movie,
-              onMovie: close,
+              onMovie: (context, movie) {
+                close(context, movie);
+              },
             );
           },
         );
@@ -71,15 +106,16 @@ class _MovieItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => onMovie(context, movie),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Imagen de la pelicula
             SizedBox(
               width: size.width * 0.2,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 child: Image.network(
                   movie.posterPath,
                   loadingBuilder: (context, child, loadingProgress) =>
@@ -87,6 +123,7 @@ class _MovieItem extends StatelessWidget {
                 ),
               ),
             ),
+            //informacion de la pelicula
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -99,7 +136,7 @@ class _MovieItem extends StatelessWidget {
                         maxLines: 2,
                         style: textStyle.titleMedium,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       movie.overview.length >= 100
@@ -107,12 +144,12 @@ class _MovieItem extends StatelessWidget {
                           : Text(movie.overview),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star_half_outlined,
                             color: Colors.amber,
                           ),
                           Text(
-                            '${HumanFormats.Humanformats(movie.voteAverage)}',
+                            HumanFormats.Humanformats(movie.voteAverage),
                             style: textStyle.bodyMedium!
                                 .copyWith(color: Colors.amber),
                           )

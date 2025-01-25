@@ -1,8 +1,8 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cine_app/config/router/app_router.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/delegates/movie_search_delegate.dart';
 import 'package:cine_app/presentation/providers/movies/movie_repository_provider.dart';
+import 'package:cine_app/presentation/providers/search/search_movies_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +17,6 @@ class CustomAppbar extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme.bodyLarge;
 
-    final movierepository = ref.read(movieRepositoryProvider);
     final themeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
 
@@ -52,10 +51,19 @@ class CustomAppbar extends ConsumerWidget {
               // Botón de búsqueda
               IconButton(
                 onPressed: () {
+                  final movierepository = ref.read(movieRepositoryProvider);
+                  final searchQuery = ref.read(searchQueryProvider);
+
                   showSearch<Movie?>(
+                    query: searchQuery,
                     context: context,
                     delegate: MovieSearchDelegate(
-                      searchMovies: movierepository.searchMovies,
+                      searchMovies: (query) {
+                        ref.read(searchQueryProvider.notifier).update(
+                              (state) => query,
+                            );
+                        return movierepository.searchMovies(query);
+                      },
                     ),
                   ).then((movie) {
                     if (movie == null) return;
