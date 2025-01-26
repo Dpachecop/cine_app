@@ -1,4 +1,3 @@
-import 'package:cine_app/presentation/providers/movies/loading_screen_provider.dart';
 import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:cine_app/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
