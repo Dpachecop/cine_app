@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/Helpers/human_formats.dart';
+import 'package:cine_app/presentation/providers/search/search_movies_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/movie.dart';
 
@@ -11,18 +13,34 @@ typedef SearchMovies = Future<List<Movie>> Function(String query);
 class MovieSearchDelegate extends SearchDelegate<Movie?> {
   final SearchMovies searchMovies;
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
 
   List<Movie> initialMovies;
   Timer? debouncetimer;
 
+  final WidgetRef ref;
+
+  MovieSearchDelegate({
+    required this.searchMovies,
+    required this.initialMovies,
+    required this.ref,
+  });
+
   void onQueryChanged(String query) {
+    isLoadingStream.add(true);
     if (debouncetimer?.isActive ?? false) {
       debouncetimer!.cancel();
     }
+
     debouncetimer = Timer(
       const Duration(milliseconds: 500),
       () async {
+        isLoadingStream.add(true);
+
         if (query.isEmpty) {
+          // Si el query está vacío, actualizamos el estado para reflejarlo.
+          ref.read(searchQueryProvider.notifier).update((state) => '');
+          ref.read(searchedMoviesProvider.notifier).state = [];
           debouncedMovies.add([]);
           return;
         }
@@ -30,8 +48,67 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
         final movies = await searchMovies(query);
         initialMovies = movies;
         debouncedMovies.add(movies);
+        isLoadingStream.add(false);
       },
     );
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    if (query.isNotEmpty) {
+      return [
+        StreamBuilder(
+          stream: isLoadingStream.stream,
+          initialData: false,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data ?? false) {
+              return SpinPerfect(
+                duration: const Duration(seconds: 5),
+                child: IconButton(
+                  onPressed: () {
+                    query = '';
+                  },
+                  icon: const Icon(Icons.refresh_outlined),
+                ),
+              );
+            }
+
+            return FadeIn(
+              child: IconButton(
+                onPressed: () {
+                  query = '';
+                },
+                icon: const Icon(Icons.clear),
+              ),
+            );
+          },
+        ),
+      ];
+    }
+    return null;
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        // Cuando el usuario cierra el SearchDelegate, no se borra si hay query.
+
+        close(context, null);
+      },
+      icon: const Icon(Icons.arrow_back_ios_new_outlined),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildResultsAndSuggestions();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    onQueryChanged(query);
+    return buildResultsAndSuggestions();
   }
 
   Widget buildResultsAndSuggestions() {
@@ -40,7 +117,6 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
       stream: debouncedMovies.stream,
       builder: (BuildContext context, snapshot) {
         final movies = snapshot.data ?? [];
-
         return ListView.builder(
           itemCount: movies.length,
           itemBuilder: (BuildContext context, int index) {
@@ -55,49 +131,6 @@ class MovieSearchDelegate extends SearchDelegate<Movie?> {
         );
       },
     );
-  }
-
-  void clearStreams() {
-    debouncedMovies.close();
-  }
-
-  MovieSearchDelegate(
-      {required this.searchMovies, required this.initialMovies});
-
-  @override
-  String get searchFieldLabel => 'Buscar peli';
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      FadeIn(
-        curve: Curves.bounceInOut,
-        animate: query.isNotEmpty,
-        child: IconButton(
-            onPressed: () => query = '', icon: const Icon(Icons.clear_rounded)),
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          clearStreams();
-          close(context, null);
-        },
-        icon: const Icon(Icons.arrow_back_ios_new_outlined));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return buildResultsAndSuggestions();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    onQueryChanged(query);
-    return buildResultsAndSuggestions();
   }
 }
 

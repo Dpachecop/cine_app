@@ -64,17 +64,17 @@ class CustomAppbar extends ConsumerWidget {
                             .read(searchedMoviesProvider.notifier)
                             .searchedMoviesByQuery(query);
                       },
+                      ref: ref, // Pasamos el ref
                     ),
                   ).then((movie) {
-                    if (movie == null) return;
-
-                    if (context.mounted) {
+                    // Si se selecciona una película, realizamos la navegación.
+                    if (movie != null && context.mounted) {
                       context.push('/movie/${movie.id}');
                     }
                   });
                 },
                 icon: const Icon(Icons.search),
-              )
+              ),
             ],
           ),
         ),
