@@ -13,6 +13,7 @@ final searchedMoviesProvider =
 
 //Referencia a la funcion que llama al metodo que me devuelve movies
 //mediante el query de busqueda.
+
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 
 class SearchedMoviesNotifier extends StateNotifier<List<Movie>> {
