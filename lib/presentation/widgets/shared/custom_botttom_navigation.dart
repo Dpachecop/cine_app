@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 
 class CustomBotttomNavigation extends StatelessWidget {
-  const CustomBotttomNavigation({super.key});
+  final int currentIndex; // Índice actual
+  final void Function(int) onTabSelected; // Función para cambiar pestañas
+
+  const CustomBotttomNavigation({
+    super.key,
+    required this.currentIndex,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: currentIndex, // Marca la pestaña activa
+      onTap: onTabSelected, // Cambia pestañas
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.home_max_outlined), label: 'Inicio'),
+          icon: Icon(Icons.home_max_outlined),
+          label: 'Inicio',
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined), label: 'Categoria'),
+          icon: Icon(Icons.category_outlined),
+          label: 'Categoría',
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border_rounded), label: 'Fvoritas'),
+          icon: Icon(Icons.favorite_border_rounded),
+          label: 'Favoritos',
+        ),
       ],
     );
   }

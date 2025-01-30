@@ -1,20 +1,28 @@
-import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:cine_app/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'Home_screen';
 
-  final Widget selectedView;
-  const HomeScreen({super.key, required this.selectedView});
+  final Widget selectedView; // Vista actual
+  final int currentIndex; // Índice actual
+  final void Function(int) onTabSelected; // Función para cambiar pestañas
+
+  const HomeScreen({
+    super.key,
+    required this.selectedView,
+    required this.currentIndex,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: selectedView,
-      bottomNavigationBar: const CustomBotttomNavigation(),
+      body: selectedView, // Vista seleccionada
+      bottomNavigationBar: CustomBotttomNavigation(
+        currentIndex: currentIndex,
+        onTabSelected: onTabSelected,
+      ),
     );
   }
 }

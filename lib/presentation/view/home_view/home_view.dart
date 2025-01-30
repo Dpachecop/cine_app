@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/providers.dart';
 
 class HomeView extends ConsumerStatefulWidget {
-  const HomeView();
+  static const name = 'Home_screen';
+  const HomeView({super.key});
 
   @override
   HomeViewState createState() => HomeViewState();

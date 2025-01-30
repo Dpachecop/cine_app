@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class FavoriteView extends StatelessWidget {
-  static const name = 'Favorite_screen';
-  const FavoriteView({super.key});
+class CategoriesView extends StatelessWidget {
+  static const name = 'Categories_screen';
+  const CategoriesView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class FavoriteView extends StatelessWidget {
         title: const Text('Favoritos'),
       ),
       body: Center(
-        child: Text('Favoritos'),
+        child: Text('Categorias'),
       ),
     );
   }
