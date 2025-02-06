@@ -4,8 +4,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/providers/actors/actors_by_movie_provider.dart';
 import 'package:cine_app/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cine_app/presentation/widgets/shared/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../config/Helpers/human_formats.dart';
 
@@ -211,6 +213,20 @@ class _CustomSliverAppBar extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          context.pop();
+        },
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.favorite_border),
+          color: Colors.white,
+          iconSize: 30,
+        )
+      ],
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
@@ -233,26 +249,29 @@ class _CustomSliverAppBar extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox.expand(
-              child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.7, 1.0],
-                          colors: [Colors.transparent, Colors.black87]))),
+            const _CustomGradient(
+              beginAlingment: Alignment.topCenter,
+              endAlingment: Alignment.bottomCenter,
+              stops: [0.7, 1.0],
+              colors: [Colors.transparent, Colors.black87],
             ),
-            const SizedBox.expand(
-              child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      gradient:
-                          LinearGradient(begin: Alignment.topLeft, stops: [
-                0.0,
-                0.3
-              ], colors: [
-                Colors.black87,
+            const _CustomGradient(
+              beginAlingment: Alignment.topLeft,
+              endAlingment: Alignment.centerRight,
+              stops: [0.0, 0.2],
+              colors: [
+                Colors.black38,
                 Colors.transparent,
-              ]))),
+              ],
+            ),
+            const _CustomGradient(
+              beginAlingment: Alignment.topRight,
+              endAlingment: Alignment.centerLeft,
+              stops: [0.0, 0.2],
+              colors: [
+                Colors.black54,
+                Colors.transparent,
+              ],
             ),
           ],
         ),
@@ -285,5 +304,32 @@ class LegibleStars extends StatelessWidget {
             );
           })),
     ]);
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  final AlignmentGeometry? beginAlingment;
+  final AlignmentGeometry? endAlingment;
+  final List<double> stops; // 0.0 - 1.0
+  final List<Color> colors;
+
+  const _CustomGradient({
+    this.beginAlingment,
+    this.endAlingment,
+    required this.stops,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: beginAlingment ?? Alignment.centerLeft,
+                  end: endAlingment ?? Alignment.centerRight,
+                  stops: stops,
+                  colors: colors))),
+    );
   }
 }

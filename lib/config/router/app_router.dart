@@ -51,7 +51,6 @@ final appRouter = GoRouter(
       ],
       // Builder del shell para gestionar las pestañas
       builder: (context, state, navigationShell) {
-        // Pasa la lógica de navegación al HomeScreen
         return HomeScreen(
           selectedView: navigationShell,
           currentIndex: navigationShell.currentIndex,
@@ -61,16 +60,6 @@ final appRouter = GoRouter(
     ),
   ],
 );
-
-
-
-
-
-
-
-
-
-
 
 
 
