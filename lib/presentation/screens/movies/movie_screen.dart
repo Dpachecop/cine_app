@@ -4,7 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:cine_app/presentation/providers/actors/actors_by_movie_provider.dart';
 import 'package:cine_app/presentation/providers/movies/movie_info_provider.dart';
-import 'package:cine_app/presentation/widgets/shared/custom_appbar.dart';
+import 'package:cine_app/presentation/providers/storage/local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -203,14 +203,24 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+final isFavoriteProvider = FutureProvider.family.autoDispose(
+  (ref, int id) {
+    final localstorageRepository = ref.watch(localStorageRepositoryProvider);
+
+    return localstorageRepository.isFavorite(id);
+  },
+);
+
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+
+    final isFutureProvider = ref.watch(isFavoriteProvider(movie.id));
 
     return SliverAppBar(
       leading: IconButton(
@@ -221,8 +231,25 @@ class _CustomSliverAppBar extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.favorite_border),
+          onPressed: () async {
+            await ref
+                .read(localStorageRepositoryProvider)
+                .toggleFavorite(movie);
+
+            ref.invalidate(isFavoriteProvider(movie.id));
+          },
+          icon: isFutureProvider.when(
+            data: (isFavorite) {
+              return isFavorite
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                  : const Icon(Icons.favorite_border);
+            },
+            loading: () => const CircularProgressIndicator(),
+            error: (error, _) => const Icon(Icons.error),
+          ),
           color: Colors.white,
           iconSize: 30,
         )
