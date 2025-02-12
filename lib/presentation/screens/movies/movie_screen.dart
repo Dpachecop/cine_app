@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../config/Helpers/human_formats.dart';
+import '../../providers/storage/favorite_movies_provider.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   final String movieId;
@@ -233,7 +234,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
         IconButton(
           onPressed: () async {
             await ref
-                .read(localStorageRepositoryProvider)
+                .read(favoriteMoviesProvider.notifier)
                 .toggleFavorite(movie);
 
             ref.invalidate(isFavoriteProvider(movie.id));

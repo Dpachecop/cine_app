@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/config/router/app_router.dart';
 import 'package:cine_app/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +10,19 @@ class MoviePosterLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.push('/movie/${movie.id}');
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Image.network(
-            movie.posterPath,
-            fit: BoxFit.cover,
+    return FadeInUpBig(
+      child: GestureDetector(
+        onTap: () {
+          context.push('/movie/${movie.id}');
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Image.network(
+              movie.posterPath,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
