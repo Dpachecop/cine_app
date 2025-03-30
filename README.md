@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Características
+##  Características
 
 - 🔎 Buscar tu película favorita.
 - 📈 Ver películas populares en tiempo real.
@@ -16,7 +16,7 @@
 
 ---
 
-## 💪 Tecnologías y dependencias
+##  Tecnologías y dependencias
 
 - **Flutter** (SDK ^3.5.0)
 - **Dart**
@@ -73,7 +73,7 @@ flutter pub get
 - Copia el archivo `.env.template` y renómbralo como `.env`.
 - Reemplaza la variable `TMDB` con tu propia API Key de TheMovieDB.
 
-4. **Genera los archivos de Isar:**
+4. **Luego, corre este comando**
 
 ```bash
 dart run build_runner build
