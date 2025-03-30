@@ -89,8 +89,8 @@ flutter run
 
 ## 🧪 Requisitos
 
-- Flutter SDK ^3.5.0
-- Dart  3.5.0 
+- Flutter version 3.24.0
+- Dart SDK 3.5.0 
 - Emulador o dispositivo físico android/ios para pruebas
 
 ---
