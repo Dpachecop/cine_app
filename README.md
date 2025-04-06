@@ -3,7 +3,21 @@
 **Cinemapedia** es una aplicación desarrollada en Flutter que te permite explorar un extenso catálogo de películas. Encuentra tus favoritas, descubre las más populares del momento, consulta estrenos, películas mejor calificadas y recibe recomendaciones. Además, puedes guardar tus favoritas y ver el reparto completo de cada película.
 
 ---
+## 📸 Capturas de pantalla
 
+| Inicio | Detalle de Película | Favoritas |
+|--------|---------------------|-----------|
+| ![Inicio](assets/readme/screenshot_home.jpg) | ![Detalle](assets/readme/screenshot_detail.jpg) | ![Favoritas](assets/readme/screenshot_favorites.jpg) |
+
+---
+
+## 🎥 Películas populares
+
+Explora en tiempo real las películas que son tendencia alrededor del mundo. Cinemapedia consume la API de TheMovieDB para mostrarte un listado dinámico de las películas más populares en el momento. Esta sección se actualiza automáticamente para ofrecerte siempre lo más reciente.
+
+![Películas populares](assets/readme/screenshot_popular.jpg)
+
+---
 ##  Características
 
 - 🔎 Buscar tu película favorita.
