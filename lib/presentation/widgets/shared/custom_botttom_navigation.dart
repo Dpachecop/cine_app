@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomBotttomNavigation extends StatelessWidget {
   final int currentIndex; // Índice actual
+
   final void Function(int) onTabSelected; // Función para cambiar pestañas
 
   const CustomBotttomNavigation({
@@ -21,8 +22,8 @@ class CustomBotttomNavigation extends StatelessWidget {
           label: 'Inicio',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.category_outlined),
-          label: 'Categoría',
+          icon: Icon(Icons.thumb_up_off_alt),
+          label: 'Popular',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.favorite_border_rounded),

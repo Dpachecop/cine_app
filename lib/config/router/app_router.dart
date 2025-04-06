@@ -2,54 +2,91 @@ import 'package:cine_app/presentation/screens/movies/home_screen.dart';
 import 'package:cine_app/presentation/screens/movies/movie_screen.dart';
 import 'package:cine_app/presentation/view/home_view/categories_view.dart';
 import 'package:cine_app/presentation/view/view.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     StatefulShellRoute.indexedStack(
+      // 1.1. Definimos las ramas
       branches: [
-        // Rama para la pestaña "Inicio"
+        // -----------------------------
+        // Rama 0: Home
+        // -----------------------------
         StatefulShellBranch(
           routes: [
             GoRoute(
-                path: '/',
-                name: 'HomeScreen',
-                builder: (context, state) => const HomeView(),
-                routes: [
-                  GoRoute(
-                    path: 'movie/:id',
-                    builder: (context, state) {
-                      final String movieId =
-                          state.pathParameters['id'] ?? 'no-id';
-                      return MovieScreen(
-                        movieId: movieId,
-                      );
-                    },
-                  ),
-                ]),
+              path: '/',
+              name: 'HomeScreen',
+              builder: (context, state) => const HomeView(),
+              routes: [
+                // Subruta para el detalle de la película con transición
+                GoRoute(
+                  path: 'movie/:id',
+                  builder: (context, state) {
+                    final String movieId =
+                        state.pathParameters['id'] ?? 'no-id';
+                    return MovieScreen(movieId: movieId);
+                  },
+                  pageBuilder: (context, state) {
+                    // Esta transición se aplica al navegar a "movie/:id"
+                    return CustomTransitionPage(
+                      child: MovieScreen(
+                        movieId: state.pathParameters['id'] ?? 'no-id',
+                      ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
-        // Rama para la pestaña "Categorías"
+
+        // -----------------------------
+        // Rama 1: Categories
+        // -----------------------------
         StatefulShellBranch(
           routes: [
             GoRoute(
-                path: '/categories',
-                name: 'Categories',
-                builder: (context, state) => const CategoriesView()),
+              path: '/categories',
+              name: 'Categories',
+              pageBuilder: (context, state) => CustomTransitionPage(
+                child: const CategoriesView(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            ),
           ],
         ),
-        // Rama para la pestaña "Favoritos"
+
         StatefulShellBranch(
           routes: [
             GoRoute(
-                path: '/favorites',
-                name: 'Favorites',
-                builder: (context, state) => const FavoriteView()),
+              path: '/favorites',
+              name: 'Favorites',
+              builder: (context, state) => const FavoriteView(),
+            ),
           ],
         ),
       ],
-      // Builder del shell para gestionar las pestañas
       builder: (context, state, navigationShell) {
         return HomeScreen(
           selectedView: navigationShell,
@@ -61,18 +98,7 @@ final appRouter = GoRouter(
   ],
 );
 
-
-
-
-
-
-
-
-
-
-
-
-  /*
+/*
   ShellRoute(
       builder: (context, state, child) {
         return HomeScreen(selectedView: child);

@@ -30,7 +30,6 @@ class HomeViewState extends ConsumerState {
     if (initialLoading) return const FullLoaderScreen();
 
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
-    final popularMovies = ref.watch(popularMoviesProvider);
     final upComingMovies = ref.watch(upComingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final slideMovies = ref.watch(MovieSlideViewProvider);
@@ -51,7 +50,7 @@ class HomeViewState extends ConsumerState {
                   movies: nowPLayingMovies,
                   label: 'En cines',
                   //TODO: implementar un metodo que te de una peli aleatoria
-                  subLabel: '¡Aleatorio!',
+                  subLabel: '¡Lo mejor!',
                   loadNextpage: () {
                     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
                   },
@@ -60,7 +59,7 @@ class HomeViewState extends ConsumerState {
                   movies: topRatedMovies,
                   label: 'Mejores calificadas',
                   //TODO: implementar un metodo que te de una peli aleatoria
-                  subLabel: '¡Aleatorio!',
+                  subLabel: '¡Para disfrutar!',
                   loadNextpage: () {
                     ref.read(topRatedMoviesProvider.notifier).loadNextPage();
                   },
@@ -69,18 +68,9 @@ class HomeViewState extends ConsumerState {
                   movies: upComingMovies,
                   label: 'Estrenos',
                   //TODO: implementar un metodo que te de una peli aleatoria
-                  subLabel: '¡Aleatorio!',
+                  subLabel: '¡Pronto!',
                   loadNextpage: () {
                     ref.read(upComingMoviesProvider.notifier).loadNextPage();
-                  },
-                ),
-                HorizontalMovieSlideview(
-                  movies: popularMovies,
-                  label: 'populares',
-                  //TODO: implementar un metodo que te de una peli aleatoria
-                  subLabel: '¡Aleatorio!',
-                  loadNextpage: () {
-                    ref.read(popularMoviesProvider.notifier).loadNextPage();
                   },
                 ),
               ],

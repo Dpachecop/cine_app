@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:cine_app/domain/entities/movie.dart';
-import 'package:cine_app/presentation/providers/actors/actors_by_movie_provider.dart';
-import 'package:cine_app/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cine_app/presentation/providers/providers.dart';
 import 'package:cine_app/presentation/providers/storage/local_storage_provider.dart';
+
+import 'package:cine_app/presentation/widgets/movies/similar_movies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,8 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final movies =
+        ref.watch(movieRepositoryProvider).similarMovies(widget.movieId);
     final Movie? movie = ref.watch(movieInfoProvider)[widget.movieId];
 
     if (movie == null) {
@@ -50,7 +53,9 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
       _CustomSliverAppBar(movie: movie),
       SliverList(
           delegate: SliverChildBuilderDelegate(
-              (context, index) => _MovieDetails(movie: movie),
+              (context, index) => _MovieDetails(
+                    movie: movie,
+                  ),
               childCount: 1))
     ]));
   }
@@ -59,7 +64,9 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 class _MovieDetails extends StatelessWidget {
   final Movie movie;
 
-  const _MovieDetails({required this.movie});
+  const _MovieDetails({
+    required this.movie,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +142,8 @@ class _MovieDetails extends StatelessWidget {
             ],
           ),
         ),
-        _ActorsByMovie(movieId: movie.id.toString())
+        _ActorsByMovie(movieId: movie.id.toString()),
+        SimilarMovies(movieId: movie.id.toString())
       ],
     );
   }

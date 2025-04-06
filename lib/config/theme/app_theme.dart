@@ -17,7 +17,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blueAccent,
+        seedColor: Colors.tealAccent,
         brightness: Brightness.dark,
       ),
     );
